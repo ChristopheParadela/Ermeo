@@ -1,3 +1,7 @@
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![Build Status](https://travis-ci.org/ChristopheParadela/Ermeo.svg?branch=master)](https://travis-ci.org/ChristopheParadela/Ermeo)
+[![Coverage Status](https://coveralls.io/repos/github/ChristopheParadela/Ermeo/badge.svg?branch=master)](https://coveralls.io/github/ChristopheParadela/Ermeo?branch=master)
+
 # Ermeo
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.1.
