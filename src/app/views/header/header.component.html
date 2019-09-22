@@ -1,15 +1,14 @@
-<div class="header">
+<div class="header" *ngIf="client">
   <div class="client-info">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/OnePlus_logo.png" alt="Client logo" />
-    <span>Oneplus</span>
+    <img [src]="client.logoUrl" alt="Client logo" />
+    <span>{{ client.name }}</span>
   </div>
 
-  <div class="client-assets">
+  <div class="client-assets" *ngIf="client.assets">
     <mat-form-field>
       <mat-label>Assets</mat-label>
-      <mat-select>
-        <mat-option value="computer">Computer</mat-option>
-        <mat-option value="ventilator">Ventilator</mat-option>
+      <mat-select (selectionChange)="onSelectionChange()" [(value)]="assetSelected.id">
+        <mat-option *ngFor="let asset of client.assets" [value]="asset.id">{{ asset.name }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
