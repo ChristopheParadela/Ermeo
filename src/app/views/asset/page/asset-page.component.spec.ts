@@ -2,6 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AssetPageComponent } from './asset-page.component';
 import { HeaderModule } from '../../header/header.module';
+import { MatCardModule, MatDividerModule } from '@angular/material';
+import { AnomalyModule } from '../../anomaly/anomaly.module';
+import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AssetPageComponent', () => {
   let component: AssetPageComponent;
@@ -10,7 +13,7 @@ describe('AssetPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AssetPageComponent],
-      imports: [HeaderModule]
+      imports: [BrowserAnimationsModule, NoopAnimationsModule, HeaderModule, AnomalyModule, MatCardModule, MatDividerModule]
     }).compileComponents();
   }));
 
