@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ApiGetParamsData } from 'src/app/shared/services/api/api.service';
+import { ClientApiService } from 'src/app/shared/services/api/client-api.service';
+import { Asset } from 'src/app/shared/models/asset';
+import { ApiGetResponseDataAnomaly } from 'src/app/shared/services/api/anomaly-api.service';
+import { MatTableDataSource, Sort } from '@angular/material';
+import { Anomaly } from 'src/app/shared/models/anomaly';
 
 export interface PeriodicElement {
   name: string;
@@ -12,74 +19,73 @@ export interface PeriodicElement {
   templateUrl: './anomaly-list.component.html',
   styleUrls: ['./anomaly-list.component.scss']
 })
-export class AnomalyListComponent implements OnInit {
-  displayedColumns: string[] = ['indicator', 'status', 'createdAt', 'updatedAt', 'criticity'];
-  dataSource = [
-    {
-      status: 'Created',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Pending',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'In Progress',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Resolved',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Pending',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'In Progress',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Resolve',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Resolved',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Pending',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
-    },
-    {
-      status: 'Pending',
-      createdAt: '2019-09-21T06:31:08.836Z',
-      updatedAt: '14/12/2019',
-      criticity: { min: 1, max: 100, value: 50 }
+export class AnomalyListComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() private asset: Asset;
+
+  public displayedColumns: string[] = ['indicator', 'status', 'createdAt', 'updatedAt', 'criticity'];
+  public sub: Subscription;
+  public lengthData: number;
+  public paramApi: ApiGetParamsData;
+  public dataSource: MatTableDataSource<Anomaly>;
+
+  constructor(private clientApiService: ClientApiService) {
+    this.paramApi = new ApiGetParamsData({
+      limit: 5,
+      page: 1,
+      sort: 'desc',
+      order: 'id'
+    });
+  }
+
+  ngOnInit() {
+    this.getAnomalies();
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.asset = changes.asset.currentValue;
+    this.getAnomalies();
+  }
+
+  public applyFilter(filterValue: string): void {
+    this.paramApi.filter = filterValue.toLowerCase();
+    this.getAnomalies();
+  }
+
+  public onPageChange(event): void {
+    this.paramApi.limit = event.pageSize;
+    this.paramApi.page = event.pageIndex + 1;
+    this.getAnomalies();
+  }
+
+  public onSortEvent(sort: Sort): void {
+    this.paramApi.sortBy = sort.active;
+    this.paramApi.order = sort.direction;
+
+    this.getAnomalies();
+  }
+
+  private getAnomalies(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
-  ];
 
-  constructor() {}
+    this.sub = this.clientApiService.getAnomaliesAssetClient(1, this.asset.id, this.paramApi).subscribe(
+      // The id (1) is just for the test, to simulate the client.
+      (response: ApiGetResponseDataAnomaly) => {
+        this.setDataTable(response);
+      },
+      error => {
+        console.log('Error: ', error);
+      }
+    );
+  }
 
-  ngOnInit() {}
-
-  public applyFilter(filterValue: string): void {}
+  private setDataTable(dataApi: ApiGetResponseDataAnomaly): void {
+    this.dataSource = new MatTableDataSource<Anomaly>(dataApi.data);
+    this.lengthData = dataApi.count;
+  }
 }

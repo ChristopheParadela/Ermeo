@@ -1,6 +1,6 @@
-<app-header></app-header>
+<app-header [assetSelected]="asset"></app-header>
 
-<div class="container">
+<div *ngIf="asset; else assetNotFound" class="container">
   <div
     gdAreas="side content"
     gdGap="4%"
@@ -13,26 +13,31 @@
     <div gdArea="side">
       <mat-card class="example-card">
         <mat-card-header>
-          <mat-card-title>Computer</mat-card-title>
-          <mat-card-subtitle>10 Interventions</mat-card-subtitle>
+          <mat-card-title>{{ asset.name }}</mat-card-title>
+          <mat-card-subtitle>{{ asset.interventions.length }} Interventions</mat-card-subtitle>
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
           <p>Last anomaly reference:</p>
           <p>14</p>
+
           <p>Last intervention date:</p>
-          <p>10/06/2019</p>
+          <p>{{ asset.getLastInterventionPlanned().plannedAt | date: 'dd/MM/yyyy' }}</p>
+
           <p>Summary intervention:</p>
           <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small,
-            agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.
+            {{ asset.getLastInterventionPlanned().summary }}
           </p>
         </mat-card-content>
       </mat-card>
     </div>
 
     <div gdArea="content">
-      <app-anomaly-list></app-anomaly-list>
+      <app-anomaly-list [asset]="asset"></app-anomaly-list>
     </div>
   </div>
 </div>
+
+<ng-template #assetNotFound>
+  <p class="error-msg">Asset not found</p>
+</ng-template>
