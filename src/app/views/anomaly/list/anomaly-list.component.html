@@ -3,13 +3,19 @@
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
   </mat-form-field>
 
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortEvent($event)" class="mat-elevation-z8">
     <ng-container matColumnDef="indicator">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Indicator</th>
+      <th mat-header-cell *matHeaderCellDef>Indicator</th>
       <td mat-cell *matCellDef="let element">
-        <mat-chip-list>
-          <mat-chip color="accent" selected></mat-chip>
-        </mat-chip-list>
+        <span
+          class="bullet"
+          [ngClass]="{
+            isCreated: element.isCreated(),
+            isPending: element.isPending(),
+            isInProgress: element.isInProgress(),
+            isResolved: element.isResolved()
+          }"
+        ></span>
       </td>
     </ng-container>
 
@@ -25,12 +31,16 @@
 
     <ng-container matColumnDef="updatedAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Updated at</th>
-      <td mat-cell *matCellDef="let element">{{ element.updatedAt }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.updatedAt | date: 'dd/MM/yyyy' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="criticity">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Criticity</th>
-      <td mat-cell *matCellDef="let element">{{ element.criticity.value }} / {{ element.criticity.max }}</td>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.criticityRange && element.criticityRange.value">
+          {{ element.criticityRange.value }} / {{ element.criticityRange.max }}
+        </ng-container>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -39,8 +49,8 @@
 
   <mat-paginator
     (page)="onPageChange($event)"
-    [length]="5"
-    [pageSize]="5"
+    [length]="lengthData"
+    [pageSize]="paramApi.limit"
     [pageSizeOptions]="[5, 10, 20]"
   ></mat-paginator>
 </div>
