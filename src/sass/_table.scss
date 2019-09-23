@@ -1,0 +1,17 @@
+::ng-deep {
+  .mat-tab-label.mat-tab-label-active {
+    opacity: 1 !important;
+  }
+  table {
+    width: 100%;
+
+    tbody tr {
+      text-transform: capitalize;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #f4f9ff;
+      }
+    }
+  }
+}
