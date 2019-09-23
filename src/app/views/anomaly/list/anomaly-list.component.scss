@@ -1,9 +1,8 @@
+@import '../../../../sass/table';
+
 :host {
   .list-container {
     mat-form-field {
-      width: 100%;
-    }
-    table {
       width: 100%;
     }
   }
@@ -27,8 +26,4 @@
       background-color: green;
     }
   }
-}
-
-::ng-deep tbody tr {
-  text-transform: capitalize;
 }

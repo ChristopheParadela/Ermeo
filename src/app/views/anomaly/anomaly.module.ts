@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 // Component
 import { AnomalyListComponent } from './list/anomaly-list.component';
+import { AnomalyPageComponent } from './page/anomaly-page.component';
 
 // Module
 import {
@@ -13,11 +14,13 @@ import {
   MatSortModule,
   MatChipsModule
 } from '@angular/material';
+import { HeaderModule } from '../header/header.module';
 
 @NgModule({
-  declarations: [AnomalyListComponent],
+  declarations: [AnomalyListComponent, AnomalyPageComponent],
   imports: [
     CommonModule,
+    HeaderModule,
     MatChipsModule,
     MatFormFieldModule,
     MatInputModule,

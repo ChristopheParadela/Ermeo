@@ -18,16 +18,18 @@
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
-          <p>Last anomaly reference:</p>
-          <p>14</p>
+          <ng-container *ngIf="asset.getLastInterventionPlanned()">
+            <p>Last ID anomaly reference:</p>
+            <p>{{ asset.getLastInterventionPlanned().anomalyId }}</p>
 
-          <p>Last intervention date:</p>
-          <p>{{ asset.getLastInterventionPlanned().plannedAt | date: 'dd/MM/yyyy' }}</p>
+            <p>Last intervention date:</p>
+            <p>{{ asset.getLastInterventionPlanned().plannedAt | date: 'dd/MM/yyyy' }}</p>
 
-          <p>Summary intervention:</p>
-          <p>
-            {{ asset.getLastInterventionPlanned().summary }}
-          </p>
+            <p>Summary intervention:</p>
+            <p>
+              {{ asset.getLastInterventionPlanned().summary }}
+            </p>
+          </ng-container>
         </mat-card-content>
       </mat-card>
     </div>
