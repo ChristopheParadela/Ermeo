@@ -1,4 +1,5 @@
 import { CriticityRange } from './criticity-range';
+import { Intervention } from './intervention';
 
 export interface AnomalyParam {
   id?: number;
@@ -6,6 +7,7 @@ export interface AnomalyParam {
   criticityRange?: CriticityRange;
   createdAt?: Date;
   updatedAt?: Date;
+  intervention?: Intervention;
 }
 
 export class Anomaly {
@@ -19,6 +21,7 @@ export class Anomaly {
   protected _criticityRange: CriticityRange;
   protected _createdAt: Date;
   protected _updatedAt: Date;
+  protected _intervention: Intervention;
 
   public constructor(anomalyParam?: AnomalyParam) {
     if (anomalyParam) {
@@ -27,6 +30,8 @@ export class Anomaly {
       this._criticityRange = new CriticityRange(anomalyParam.criticityRange);
       this._createdAt = anomalyParam.createdAt;
       this._updatedAt = anomalyParam.updatedAt;
+      this._intervention = new Intervention(anomalyParam.intervention[0]);
+      // We suppose an anomaly has one intervention, the API have to return intervention object, not array
     }
   }
 
@@ -68,6 +73,14 @@ export class Anomaly {
 
   public set updatedAt(value: Date) {
     this._updatedAt = value;
+  }
+
+  public get intervention(): Intervention {
+    return this._intervention;
+  }
+
+  public set intervention(value: Intervention) {
+    this._intervention = value;
   }
 
   public isCreated(): boolean {

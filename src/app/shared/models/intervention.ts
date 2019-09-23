@@ -1,8 +1,11 @@
+import { Anomaly } from './anomaly';
+
 export interface InterventionParam {
   id?: number;
   summary?: string;
   plannedAt?: Date;
   createdAt?: Date;
+  anomalyId?: number;
 }
 
 export class Intervention {
@@ -10,6 +13,7 @@ export class Intervention {
   protected _summary: string;
   protected _plannedAt: Date;
   protected _createdAt: Date;
+  protected _anomalyId: number;
 
   public constructor(interventionParam?: InterventionParam) {
     if (interventionParam) {
@@ -17,6 +21,7 @@ export class Intervention {
       this._summary = interventionParam.summary;
       this._plannedAt = interventionParam.plannedAt;
       this._createdAt = interventionParam.createdAt;
+      this._anomalyId = interventionParam.anomalyId;
     }
   }
 
@@ -50,5 +55,13 @@ export class Intervention {
 
   public set createdAt(value: Date) {
     this._createdAt = value;
+  }
+
+  public get anomalyId(): number {
+    return this._anomalyId;
+  }
+
+  public set anomalyId(value: number) {
+    this._anomalyId = value;
   }
 }

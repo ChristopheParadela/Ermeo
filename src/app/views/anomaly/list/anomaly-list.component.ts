@@ -6,6 +6,7 @@ import { Asset } from 'src/app/shared/models/asset';
 import { ApiGetResponseDataAnomaly } from 'src/app/shared/services/api/anomaly-api.service';
 import { MatTableDataSource, Sort } from '@angular/material';
 import { Anomaly } from 'src/app/shared/models/anomaly';
+import { Router } from '@angular/router';
 
 export interface PeriodicElement {
   name: string;
@@ -22,18 +23,27 @@ export interface PeriodicElement {
 export class AnomalyListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() private asset: Asset;
 
-  public displayedColumns: string[] = ['indicator', 'status', 'createdAt', 'updatedAt', 'criticity'];
+  public displayedColumns: string[] = [
+    'indicator',
+    'id',
+    'status',
+    'createdAt',
+    'updatedAt',
+    'criticity',
+    'interventionDatePlanned',
+    'interventionSummary'
+  ];
   public sub: Subscription;
   public lengthData: number;
   public paramApi: ApiGetParamsData;
   public dataSource: MatTableDataSource<Anomaly>;
 
-  constructor(private clientApiService: ClientApiService) {
+  constructor(private clientApiService: ClientApiService, private router: Router) {
     this.paramApi = new ApiGetParamsData({
       limit: 5,
       page: 1,
-      sort: 'desc',
-      order: 'id'
+      order: 'desc',
+      sortBy: 'id'
     });
   }
 
@@ -66,6 +76,10 @@ export class AnomalyListComponent implements OnInit, OnChanges, OnDestroy {
     this.paramApi.order = sort.direction;
 
     this.getAnomalies();
+  }
+
+  public goToAnomalyDetailsPage(anomaly: Anomaly): void {
+    this.router.navigateByUrl(`asset/${this.asset.id}/anomaly/${anomaly.id}`);
   }
 
   private getAnomalies(): void {

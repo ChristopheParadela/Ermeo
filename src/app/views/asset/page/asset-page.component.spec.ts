@@ -14,7 +14,15 @@ describe('AssetPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AssetPageComponent],
-      imports: [RouterModule.forRoot([]), BrowserAnimationsModule, NoopAnimationsModule, HeaderModule, AnomalyModule, MatCardModule, MatDividerModule]
+      imports: [
+        RouterModule.forRoot([]),
+        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        HeaderModule,
+        AnomalyModule,
+        MatCardModule,
+        MatDividerModule
+      ]
     }).compileComponents();
   }));
 
